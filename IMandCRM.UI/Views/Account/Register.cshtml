@@ -1,0 +1,230 @@
+﻿@model RegisterModel
+@using Newtonsoft.Json
+@using IMandCRM.UI.Messages
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--begin::Toolbar-->
+<div class="toolbar" id="kt_toolbar">
+    <!--begin::Container-->
+    <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+        <!--begin::Page title-->
+        <div data-kt-place="true" data-kt-place-mode="prepend" data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
+            <!--begin::Title-->
+            <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Kullanıcı Ekle</h1>
+            <!--end::Title-->
+            <!--begin::Separator-->
+            <span class="h-20px border-gray-200 border-start mx-4"></span>
+            <!--end::Separator-->
+            <!--begin::Breadcrumb-->
+            <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+                <!--begin::Item-->
+                <li class="breadcrumb-item text-muted">
+                    <a href="/Home/Index" class="text-muted text-hover-primary">Anasayfa</a>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-200 w-5px h-2px"></span>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item text-dark">Kullanıcı Ekle</li>
+                <!--end::Item-->
+            </ul>
+            <!--end::Breadcrumb-->
+        </div>
+        <!--end::Page title-->
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Toolbar-->
+
+<div class="post d-flex flex-column-fluid" id="kt_post">
+    <!--begin::Wrapper-->
+    <div class="w-lg-600px bg-white rounded shadow-sm p-10 p-lg-15 mx-auto">
+        <!--begin::Form-->
+        <form class="form w-100" novalidate="novalidate" id="kt_sign_up_form" asp-controller="Account" asp-action="Register" method="post" enctype="multipart/form-data">
+            <!--begin::Heading-->
+            <div class="mb-10 text-center">
+                <!--begin::Title-->
+                <h1 class="text-dark mb-3">Yeni Kullanıcı Ekle</h1>
+                <!--end::Title-->
+            </div>
+            <!--end::Heading-->
+            <div class="fv-row mb-7">
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>
+            <!--begin::Input group-->
+            <div class="fv-row mb-7">
+                <label class="form-label fw-bolder text-dark fs-6">Kullanıcı Adı</label>
+                <input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="UserName" asp-for="UserName" autocomplete="off" />
+            </div>
+            <!--end::Input group-->
+            <!--begin::Input group-->
+            <div class="row fv-row mb-7">
+                <!--begin::Col-->
+                <div class="col-xl-6">
+                    <label class="form-label fw-bolder text-dark fs-6">Ad</label>
+                    <input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="FirstName" asp-for="FirstName" autocomplete="off" />
+                </div>
+                <!--end::Col-->
+                <!--begin::Col-->
+                <div class="col-xl-6">
+                    <label class="form-label fw-bolder text-dark fs-6">Soyad</label>
+                    <input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="LastName" asp-for="LastName" autocomplete="off" />
+                </div>
+                <!--end::Col-->
+            </div>
+            <!--end::Input group-->
+            <!--begin::Input group-->
+            <div class="fv-row mb-7">
+                <label class="form-label fw-bolder text-dark fs-6">Email</label>
+                <input class="form-control form-control-lg form-control-solid" type="email" placeholder="" name="Email" asp-for="Email" autocomplete="off" />
+            </div>
+            <!--end::Input group-->
+            <!--begin::Input group-->
+            <div class="fv-row mb-7">
+                <label class="form-label fw-bolder text-dark fs-6">Telefon</label>
+                <input class="form-control form-control-lg form-control-solid PhoneMask" type="text" placeholder="" name="PhoneNumber" asp-for="PhoneNumber" autocomplete="off" />
+            </div>
+            <!--end::Input group-->
+            <!--begin::Input group-->
+            <div class="fv-row mb-7">
+                <label class="fs-6 fw-bold mb-2">Profil Fotoğrafı</label>
+                <div class="col-lg-12">
+                    <!--begin::Image input-->
+                    <div class="image-input image-input-outline ml-1" data-kt-image-input="true" style="background-image: url(/assets/media/users/default.png)">
+                        <!--begin::Preview existing avatar-->
+                        <div class="image-input-wrapper w-100px h-100px" style="background-image: url(/assets/media/users/default.png)"></div>
+                        <!--end::Preview existing avatar-->
+                        <!--begin::Label-->
+                        <label class="btn btn-icon btn-active-color-primary w-50px h-25px bg-white shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Fotoğraf Değiştir">
+                            <i class="bi bi-plus-circle-fill"><span style="font-style:normal;">Ekle</span></i>
+                            <!--begin::Inputs-->
+                            <input type="file" name="UserPhoto" accept=".png, .jpg, .jpeg" />
+                            <input type="hidden" name="userPhoto_remove" />
+                            <!--end::Inputs-->
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Cancel-->
+                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Fotoğraf İptal">
+                            <i class="bi bi-x fs-2"></i>
+                        </span>
+                        <!--end::Cancel-->
+                        <!--begin::Remove-->
+                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Fotoğraf Sil">
+                            <i class="bi bi-x fs-2"></i>
+                        </span>
+                        <!--end::Remove-->
+                    </div>
+                    <!--end::Image input-->
+                    <!--begin::Hint-->
+                    <div class="form-text">Fotoğraf tipi: png, jpg, jpeg.</div>
+                    <!--end::Hint-->
+                </div>
+
+            </div>
+            <!--end::Input group-->
+            <!--begin::Input group-->
+            <div class="mb-10 fv-row" data-kt-password-meter="true">
+                <!--begin::Wrapper-->
+                <div class="mb-1">
+                    <!--begin::Label-->
+                    <label class="form-label fw-bolder text-dark fs-6">Şifre</label>
+                    <!--end::Label-->
+                    <!--begin::Input wrapper-->
+                    <div class="position-relative mb-3">
+                        <input class="form-control form-control-lg form-control-solid" type="password" placeholder="" name="Password" asp-for="Password" autocomplete="off" />
+                        <span class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2" data-kt-password-meter-control="visibility">
+                            <i class="bi bi-eye-slash fs-2"></i>
+                            <i class="bi bi-eye fs-2 d-none"></i>
+                        </span>
+                    </div>
+                    <!--end::Input wrapper-->
+                    <!--begin::Meter-->
+                    <div class="d-flex align-items-center mb-3" data-kt-password-meter-control="highlight">
+                        <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
+                        <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
+                        <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
+                        <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px"></div>
+                    </div>
+                    <!--end::Meter-->
+                </div>
+                <!--end::Wrapper-->
+                <!--begin::Hint-->
+                <div class="text-muted">Parola en az 8 karakter ve küçük harf, sayısal değer, sembol içermelidir.</div>
+                <!--end::Hint-->
+            </div>
+            <!--end::Input group=-->
+            <!--begin::Input group-->
+            <div class="fv-row mb-5">
+                <label class="form-label fw-bolder text-dark fs-6">Şifre Doğrulama</label>
+                <input class="form-control form-control-lg form-control-solid" type="password" placeholder="" name="RePassword" asp-for="RePassword" autocomplete="off" />
+            </div>
+            <!--end::Input group-->
+            <!--begin::Actions-->
+            <div class="text-center">
+                <button type="button" id="kt_sign_up_submit" class="btn btn-lg btn-primary">
+                    <span class="indicator-label">Kaydet</span>
+                </button>
+            </div>
+            <!--end::Actions-->
+        </form>
+        <!--end::Form-->
+    </div>
+    <!--end::Wrapper-->
+</div>
+<!--end::Post-->
+
+
+@section Scripts{
+    <script src="~/assets/js/custom/authentication/sign-up/general.js"></script>
+
+    <script>
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut",
+        };
+
+
+        var msg;
+        if ('@TempData["message"]' != undefined && '@TempData["message"]' != "") {
+            msg = '@Html.Raw((string)TempData["message"])';
+            if (msg != null) {
+                msgArr = msg.split('|');
+                if (msgArr[1] == "success") {
+                    toastr.success(msgArr[0]);
+                } else if (msgArr[1] == "error") {
+                    toastr.error(msgArr[0]);
+                } else if (msgArr[1] == "warning") {
+                    toastr.warning(msgArr[0]);
+                } else if (msgArr[1] == "info") {
+                    toastr.info(msgArr[0]);
+                }
+
+            }
+        }
+
+        Inputmask({
+            "mask": "(999) 999-9999"
+        }).mask(".PhoneMask");
+
+    </script>
+}

@@ -1,0 +1,211 @@
+﻿@{
+    ViewData["Title"] = "Location";
+}
+
+<!--begin::Toolbar-->
+<div class="toolbar" id="kt_toolbar">
+    <!--begin::Container-->
+    <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+        <!--begin::Page title-->
+        <div data-kt-place="true" data-kt-place-mode="prepend" data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
+            <!--begin::Title-->
+            <!--end::Title-->
+            <!--begin::Separator-->
+            <span class="h-20px border-gray-200 border-start mx-4"></span>
+            <!--end::Separator-->
+            <!--begin::Breadcrumb-->
+            <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+                <!--begin::Item-->
+                <li class="breadcrumb-item text-muted">
+                    <a href="/Home/Index" class="text-muted text-hover-primary">Measurement Card</a>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-200 w-5px h-2px"></span>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item text-muted">
+                    <a href="/ArrayDesign/ArrayDesigns" class="text-muted text-hover-primary">Dizilim Listesi</a>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-200 w-5px h-2px"></span>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item text-dark">Ölçüm Noktaları</li>
+                <!--end::Item-->
+            </ul>
+            <!--end::Breadcrumb-->
+        </div>
+        <!--end::Page title-->
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Toolbar-->
+<!--begin::Post-->
+<div class="post d-flex flex-column-fluid" id="kt_post">
+
+    <!--begin::Container-->
+    <div class="container">
+        <!--begin::Card-->
+        <div class="card card-custom">
+            <div class="card-body p-0">
+                <div class="wizard wizard-1" id="kt_measurements_add" data-wizard-state="step-first" data-wizard-clickable="true">
+                    <!--begin::Wizard Body-->
+                    <div class="row justify-content-center my-10 px-8 my-lg-15 px-lg-10">
+                        <div class="col-xl-12 col-xxl-10">
+                            <div class="card-header bg-danger">
+                                <h6 class="card-title text-uppercase text-white">Ölçüm Noktaları</h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="dvMap" class="card" style="width: 100%; height:60vh">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Wizard Body-->
+                </div>
+            </div>
+        </div>
+        <!--end::Card-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Post-->
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDERdtDGjGtaf62b1E4DH-YDGV_aUzjKf4"></script>
+
+<script type="text/javascript">
+
+
+    debugger;
+    var designs = @Html.Raw(ViewBag.DesignArray);
+
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('dvMap'), {
+            zoom: 13,
+            center: new google.maps.LatLng(designs[0][0][0].lat, designs[0][0][0].lng),
+            mapTypeId: google.maps.MapTypeId.TERRAIN
+        });
+
+
+        for (var k = 0; k < designs.length; k++) {
+            debugger;
+            var design = designs[k];
+
+            for (i = 0; i < design.length; i++) {
+
+                var markers = design[i];
+                debugger;
+                for (var j = 0; j < markers.length; j++) {
+
+                    var from_lat = parseFloat(markers[j].lat);
+                    var from_long = parseFloat(markers[j].lng);
+                    var data = markers[j]
+                    var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+
+                    var marker = new google.maps.Marker({
+                        position: myLatlng,
+                        map: map,
+                        label: {
+                            text: data.title,
+                            // Add in the custom label here
+                            fontFamily: 'Roboto, Arial, sans-serif'
+                        },
+                        title: data.title,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 15,
+                            fillColor: "#4A86FE",
+                            fillOpacity: 1.0,
+                            strokeWeight: 2,
+                            strokeOpacity: 0.8,
+                            strokeColor: "red",
+                            rotation: 30
+                        },
+                        url: "ArrayMeasurementDetail?idKod=" + data.idkod
+                    });
+                    (function (marker, data) {
+                        google.maps.event.addListener(marker, "click", function (e) {
+                            infoWindow.setContent(data.description);
+                            infoWindow.open(map, marker);
+                        });
+                    })(marker, data);
+
+                    google.maps.event.addListener(marker, 'click', function () {
+                        window.location.href = this.url;
+                    });
+
+                    var to_lat;
+                    var to_long;
+                    debugger;
+                    if (markers.length - 1 == j) {
+                        to_lat = parseFloat(markers[j].lat);
+                        to_long = parseFloat(markers[j].lng);
+                    }
+                    else {
+                        to_lat = parseFloat(markers[j + 1].lat);
+                        to_long = parseFloat(markers[j + 1].lng);
+                    }
+
+                    var bikePath = new google.maps.Polyline({
+                        path: [
+
+                            {
+                                lat: from_lat,
+                                lng: from_long
+                            },
+                            {
+                                lat: to_lat,
+                                lng: to_long
+                            }
+                        ],
+                        icons: [{
+                            icon: {
+                                path: google.maps.SymbolPath.CIRCLE,
+                                scale: 15,
+                                fillColor: "#4A86FE",
+                                fillOpacity: 1.0,
+                                strokeWeight: 2,
+                                strokeOpacity: 0.8,
+                                strokeColor: "red",
+                                rotation: 30
+                            },
+                            offset: '100%'
+                        }],
+                        geodesic: true,
+                        strokeColor: "red",
+                        strokeOpacity: 1.0,
+                        strokeWeight: 2,
+                        map: map
+                    });
+                    bikePath.setMap(map);
+
+
+
+                }
+
+
+            }
+
+
+        }
+
+
+   
+    }
+    google.maps.event.addDomListener(window, "load", initMap);
+
+
+
+</script>
+
+
+

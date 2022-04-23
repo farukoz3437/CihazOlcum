@@ -1,0 +1,545 @@
+﻿@model MeasurementModel
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IMandCRM.UI.Identity.User> UserManager
+@{
+    ViewData["Title"] = "MeasurementDetail";
+    var user = await UserManager.GetUserAsync(User);
+}
+
+<style>
+    .form-group {
+        margin-bottom: 1.75em;
+    }
+
+    .faicon {
+        font-weight: 100 !important;
+        font-family: unset !important;
+    }
+
+    .spanIcon {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    #overlay {
+        position: fixed;
+        display: none;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 1000;
+        cursor: wait;
+    }
+
+    #text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 50px;
+        color: white;
+        transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    #spinnerIcon {
+        font-size: 50px;
+    }
+    .input-group-text {
+        border: none !important;
+        border-right: 1px solid #eef3f7 !important;
+        border-radius: 0.475rem !important;
+    }
+
+</style>
+
+<!--begin::Toolbar-->
+<div class="toolbar" id="kt_toolbar">
+    <!--begin::Container-->
+    <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+        <!--begin::Page title-->
+        <div data-kt-place="true" data-kt-place-mode="prepend" data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
+            <!--begin::Title-->
+            <!--end::Title-->
+            <!--begin::Separator-->
+            <span class="h-20px border-gray-200 border-start mx-4"></span>
+            <!--end::Separator-->
+            <!--begin::Breadcrumb-->
+            <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+                <!--begin::Item-->
+                <li class="breadcrumb-item text-muted">
+                    <a href="/Home/Index" class="text-muted text-hover-primary">Measurement Card</a>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-200 w-5px h-2px"></span>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item text-dark">Ölçüm Detay</li>
+                <!--end::Item-->
+            </ul>
+            <!--end::Breadcrumb-->
+        </div>
+        <!--end::Page title-->
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Toolbar-->
+<!--begin::Post-->
+<div class="post d-flex flex-column-fluid" id="kt_post">
+    <!--begin::Container-->
+    <div class="container">
+        <!--begin::Card-->
+        <div class="card card-custom">
+            <div class="card-body p-0">
+                <div class="wizard wizard-1" id="kt_measurements_edit" data-wizard-state="step-first" data-wizard-clickable="true">
+                    <!--begin::Wizard Body-->
+                    <div class="row justify-content-center my-10 px-8 my-lg-15 px-lg-10">
+                        <div class="col-xl-12 col-xxl-10">
+                            <!--begin::Form Wizard-->
+                            <form class="form" id="kt_measurement_edit_form" asp-controller="Measurement" asp-action="MeasurementEdit" method="post" enctype="multipart/form-data">
+                                <!--begin::Step 1-->
+                                <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                    <h3 class="mb-10 font-weight-bold text-dark">Ölçüm Detay:</h3>
+                                    <div class="row">
+                                        <input type="hidden" name="UserId" value="@Model.UserId" />
+                                        <input type="hidden" name="IdKod" value="@Model.IdKod" />
+                                        <div class="col-xl-12">
+                                            <div class="form-group row fv-row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label">Proje Adı</label>
+                                                <div class="col-lg-9 col-xl-9">
+                                                    <input type="text" class="form-control form-control-lg form-control-solid" asp-for="ProjectName" placeholder="" name="ProjectName" readonly />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row fv-row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label">Nokta Adı</label>
+                                                <div class="col-lg-9 col-xl-9">
+                                                    <input type="text" class="form-control form-control-lg form-control-solid" asp-for="PointName" placeholder="" name="PointName" readonly />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row fv-row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label">Cihaz Adı</label>
+                                                <div class="col-lg-9 col-xl-9">
+                                                    <input type="text" class="form-control form-control-lg form-control-solid" asp-for="DeviceName" placeholder="" name="DeviceName" readonly />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row fv-row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label">Sensör Kodu</label>
+                                                <div class="col-lg-3 col-xl-3">
+                                                    <input type="text" class="form-control form-control-lg form-control-solid" asp-for="Sensor" placeholder="" name="Sensor" readonly />
+                                                </div>
+                                                <label class="col-xl-3 col-lg-3 col-form-label">Sensör Frekansı</label>
+                                                <div class="col-lg-3 col-xl-3">
+                                                    <input type="text" class="form-control form-control-lg form-control-solid" asp-for="SensorFrequency" placeholder="" name="SensorFrequency" readonly />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row fv-row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label">Lokasyon</label>
+                                                <div class="col-lg-9 col-xl-9">
+                                                    <input type="text" class="form-control form-control-lg form-control-solid" asp-for="Location" placeholder="" name="Location" readonly />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row fv-row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label">Örnekleme Frekansı</label>
+                                                <div class="col-lg-3 col-xl-3">
+                                                    <div class="input-group input-group-solid" style="flex-wrap:nowrap;">
+                                                        <!--begin::Select-->
+                                                        <select name="Frequency" data-control="select2" class="form-select form-select-solid" asp-for="Frequency" readonly>
+                                                            <option value="100">100</option>
+                                                            <option value="150">150</option>
+                                                            <option value="200">200</option>
+                                                            <option value="250">250</option>
+                                                            <option value="300">300</option>
+                                                            <option value="350">350</option>
+                                                            <option value="400">400</option>
+                                                            <option value="450">450</option>
+                                                            <option value="500">500</option>
+                                                            <option value="550">550</option>
+                                                            <option value="600">600</option>
+                                                            <option value="650">650</option>
+                                                            <option value="700">700</option>
+                                                            <option value="750">750</option>
+                                                            <option value="800">800</option>
+                                                            <option value="850">850</option>
+                                                            <option value="900">900</option>
+                                                            <option value="950">950</option>
+                                                            <option value="1000">1000</option>
+                                                        </select>
+                                                        <!--end::Select-->
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text form-control-lg">Hz</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <label class="col-xl-3 col-lg-3 col-form-label">Kayıt Süresi</label>
+                                                <div class="col-lg-3 col-xl-3">
+                                                    <div class="input-group input-group-solid">
+                                                        <input type="number" class="form-control form-control-lg form-control-solid" asp-for="RecordingTime" placeholder="" name="RecordingTime" readonly />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text form-control-lg">Dk</span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row fv-row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label">Operatör</label>
+                                                <div class="col-lg-3 col-xl-3">
+                                                    <input type="text" class="form-control form-control-lg form-control-solid" value="@Model.UserFullName" readonly />
+                                                </div>
+                                                <label class="col-xl-3 col-lg-3 col-form-label">Tarih Saat</label>
+                                                <div class="col-lg-3 col-xl-3">
+                                                    <input type="text" class="form-control form-control-lg form-control-solid" value="@Model.MeasurementDate.ToString("MM.dd.yyyy HH:mm")" readonly />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row fv-row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label">Koordinatlar</label>
+                                                <label class="col-xl-2 col-lg-2 col-form-label">Enlem</label>
+                                                <div class="col-lg-4 col-xl-4">
+                                                    <input type="number" class="form-control form-control-lg form-control-solid" asp-for="Lat" placeholder="" name="Lat" readonly />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row fv-row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label"></label>
+                                                <label class="col-xl-2 col-lg-2 col-form-label">Boylam</label>
+                                                <div class="col-lg-4 col-xl-4">
+                                                    <input type="number" class="form-control form-control-lg form-control-solid" asp-for="Lon" placeholder="" name="Lon" readonly />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row fv-row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label"></label>
+                                                <label class="col-xl-2 col-lg-2 col-form-label">Yükseklik</label>
+                                                <div class="col-lg-4 col-xl-4">
+                                                    <div class="input-group input-group-solid">
+                                                        <input type="number" class="form-control form-control-lg form-control-solid" asp-for="Ele" placeholder="" name="Ele" readonly />
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text form-control-lg">m</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row fv-row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label">Hava Şartları</label>
+                                                <div class="col-lg-9 col-xl-9">
+                                                    <div class="row">
+                                                        <div class="col-xl-2 col-lg-2">
+                                                            <input class="form-check-input" type="checkbox" id="IsWindy" name="IsWindy" asp-for="IsWindy" disabled />
+                                                            <label class="form-check-label" for="flexCheckChecked">
+                                                                Rüzgarlı
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-xl-2 col-lg-2">
+                                                            <div class="form-check form-check-custom form-check-solid">
+                                                                <input class="form-check-input" type="radio" value="0" id="WindForce0" name="WindForce" asp-for="WindForce" disabled />
+                                                                <label class="form-check-label" for="flexRadioChecked">
+                                                                    Zayıf
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-2 col-lg-2">
+                                                            <div class="form-check form-check-custom form-check-solid">
+                                                                <input class="form-check-input" type="radio" value="1" id="WindForce1" name="WindForce" asp-for="WindForce" disabled />
+                                                                <label class="form-check-label" for="flexRadioChecked">
+                                                                    Orta
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-2 col-lg-2">
+                                                            <div class="form-check form-check-custom form-check-solid">
+                                                                <input class="form-check-input" type="radio" value="2" id="WindForce2" name="WindForce" asp-for="WindForce" disabled />
+                                                                <label class="form-check-label" for="flexRadioChecked">
+                                                                    Kuvvetli
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-4 col-lg-4">
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row fv-row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label"></label>
+                                                <div class="col-lg-9 col-xl-9">
+                                                    <div class="row">
+                                                        <div class="col-xl-2 col-lg-2">
+                                                            <input class="form-check-input" type="checkbox" id="IsRainy" name="IsRainy" asp-for="IsRainy" disabled />
+                                                            <label class="form-check-label" for="flexCheckChecked">
+                                                                Yağmurlu
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-xl-2 col-lg-2">
+                                                            <div class="form-check form-check-custom form-check-solid">
+                                                                <input class="form-check-input" type="radio" value="0" id="RainForce0" name="RainForce" asp-for="RainForce" disabled />
+                                                                <label class="form-check-label" for="flexRadioChecked">
+                                                                    Zayıf
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-2 col-lg-2">
+                                                            <div class="form-check form-check-custom form-check-solid">
+                                                                <input class="form-check-input" type="radio" value="1" id="RainForce1" name="RainForce" asp-for="RainForce" disabled />
+                                                                <label class="form-check-label" for="flexRadioChecked">
+                                                                    Orta
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-2 col-lg-2">
+                                                            <div class="form-check form-check-custom form-check-solid">
+                                                                <input class="form-check-input" type="radio" value="2" id="RainForce2" name="RainForce" asp-for="RainForce" disabled />
+                                                                <label class="form-check-label" for="flexRadioChecked">
+                                                                    Kuvvetli
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-4 col-lg-4">
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row fv-row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label">Zemin Türü</label>
+                                                <div class="col-lg-9 col-xl-9">
+                                                    <!--begin::Select-->
+                                                    <select name="GroundType" data-control="select2" class="form-select form-select-solid" asp-for="GroundType" readonly>
+                                                        <option value="0">Seçiniz</option>
+                                                        <option value="1">Toprak</option>
+                                                        <option value="2">Çakıl</option>
+                                                        <option value="3">Kum</option>
+                                                        <option value="4">Kaya</option>
+                                                        <option value="5">Çim</option>
+                                                        <option value="6">Asfalt</option>
+                                                        <option value="6">Kilit Parke</option>
+                                                        <option value="7">Beton</option>
+                                                        <option value="8">Mermer/Granit</option>
+                                                        <option value="9">Diğer</option>
+                                                    </select>
+                                                    <!--end::Select-->
+                                                </div>
+                                            </div>
+                                            <div class="form-group row fv-row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label">Zemin Arası Plaka</label>
+                                                <div class="col-lg-9 col-xl-9">
+                                                    <div class="row">
+                                                        <div class="col-xl-2 col-lg-2">
+                                                            <div class="form-check form-check-custom form-check-solid">
+                                                                <input class="form-check-input" type="radio" value="0" id="GroundPlate0" name="GroundPlate" asp-for="GroundPlate" disabled />
+                                                                <label class="form-check-label" for="flexRadioChecked">
+                                                                    Yok
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-2 col-lg-2">
+                                                            <div class="form-check form-check-custom form-check-solid">
+                                                                <input class="form-check-input" type="radio" value="1" id="GroundPlate1" name="GroundPlate" asp-for="GroundPlate" disabled />
+                                                                <label class="form-check-label" for="flexRadioChecked">
+                                                                    Var
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-2 col-lg-2">
+                                                        </div>
+                                                        <div class="col-xl-2 col-lg-2">
+                                                        </div>
+                                                        <div class="col-xl-4 col-lg-4">
+                                                            <div class="form-group row fv-row">
+                                                                <label class="col-xl-3 col-lg-3 col-form-label">Cinsi</label>
+                                                                <div class="col-lg-9 col-xl-9">
+                                                                    <input type="text" class="form-control form-control-lg form-control-solid" asp-for="GroundPlateDescription" placeholder="" name="GroundPlateDescription" readonly />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row fv-row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label">Çevre Yapılar</label>
+                                                <div class="col-lg-9 col-xl-9">
+                                                    <div class="row">
+                                                        <div class="col-xl-2 col-lg-2">
+                                                            <div class="form-check form-check-custom form-check-solid">
+                                                                <input class="form-check-input" type="radio" value="0" id="EnviromentBuilding0" name="EnviromentBuilding" asp-for="EnviromentBuilding" disabled />
+                                                                <label class="form-check-label" for="flexRadioChecked">
+                                                                    Yok
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-2 col-lg-2">
+                                                            <div class="form-check form-check-custom form-check-solid">
+                                                                <input class="form-check-input" type="radio" value="1" id="EnviromentBuilding1" name="EnviromentBuilding" asp-for="EnviromentBuilding" disabled />
+                                                                <label class="form-check-label" for="flexRadioChecked">
+                                                                    Dağınık
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-2 col-lg-2">
+                                                            <div class="form-check form-check-custom form-check-solid">
+                                                                <input class="form-check-input" type="radio" value="2" id="EnviromentBuilding2" name="EnviromentBuilding" asp-for="EnviromentBuilding" disabled />
+                                                                <label class="form-check-label" for="flexRadioChecked">
+                                                                    Sık
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-2 col-lg-2">
+                                                            <div class="form-check form-check-custom form-check-solid">
+                                                                <input class="form-check-input" type="radio" value="3" id="EnviromentBuilding3" name="EnviromentBuilding" asp-for="EnviromentBuilding" disabled />
+                                                                <label class="form-check-label" for="flexRadioChecked">
+                                                                    Diğer
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-4 col-lg-4">
+                                                            <div class="form-group row fv-row">
+                                                                <label class="col-xl-3 col-lg-3 col-form-label">Tipi</label>
+                                                                <div class="col-lg-9 col-xl-9">
+                                                                    <input type="text" class="form-control form-control-lg form-control-solid" asp-for="EnviromentBuildingDescription" placeholder="" name="EnviromentBuildingDescription" readonly />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row fv-row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label">Açıklama</label>
+                                                <div class="col-lg-9 col-xl-9">
+                                                    <textarea class="form-control form-control-lg form-control-solid" rows="3" asp-for="Description" name="Description" readonly></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row fv-row">
+                                                <label class="col-xl-3 col-lg-3 col-form-label"></label>
+                                                <div class="col-lg-9 col-xl-9">
+                                                    <!--begin::Image input-->
+                                                    <div class="image-input image-input-outline ml-1" data-kt-image-input="true" style="background-image: url(/assets/media/measurements/photos/@Model.MeasurementImg)">
+                                                        <!--begin::Preview existing avatar-->
+                                                        <div class="image-input-wrapper w-300px h-300px" style="background-image: url(/assets/media/measurements/photos/@Model.MeasurementImg)"></div>
+                                                        <!--end::Preview existing avatar-->
+                                                        <!--begin::Label-->
+                                                        <label class="btn btn-icon btn-active-color-primary w-50px h-25px bg-white shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Fotoğraf Değiştir">
+                                                            <i class="bi bi-plus-circle-fill"><span style="font-style:normal;">Ekle</span></i>
+                                                            <!--begin::Inputs-->
+                                                            <input type="file" name="MeasurementImg" asp-for="MeasurementImg" accept=".png, .jpg, .jpeg" />
+                                                            <input type="hidden" name="productPhoto_remove" />
+                                                            <!--end::Inputs-->
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Cancel-->
+                                                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Fotoğraf İptal">
+                                                            <i class="bi bi-x fs-2"></i>
+                                                        </span>
+                                                        <!--end::Cancel-->
+                                                        <!--begin::Remove-->
+                                                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Fotoğraf Sil">
+                                                            <i class="bi bi-x fs-2"></i>
+                                                        </span>
+                                                        <!--end::Remove-->
+                                                    </div>
+                                                    <!--end::Image input-->
+                                                    <!--begin::Hint-->
+                                                    <div class="form-text">Fotoğraf tipi: png, jpg, jpeg.</div>
+                                                    <!--end::Hint-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                            <!--end::Form Wizard-->
+                        </div>
+                    </div>
+                    <!--end::Wizard Body-->
+                </div>
+            </div>
+        </div>
+        <!--end::Card-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Post-->
+
+
+
+@section Scripts
+{
+
+    <script>
+        $(async function () {
+
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut",
+    };
+
+
+        Inputmask({
+            "mask": "(999) 999-9999"
+        }).mask(".PhoneMask");
+
+        Inputmask({
+            "mask": "9",
+            "repeat": 10,
+            "greedy": false
+        }).mask(".TaxNumberMask");
+
+        var msg;
+        if ('@TempData["message"]' != undefined && '@TempData["message"]' != "") {
+            msg = '@Html.Raw((string)TempData["message"])';
+            if (msg != null) {
+                msgArr = msg.split('|');
+                if (msgArr[1] == "success") {
+                    toastr.success(msgArr[0]);
+                } else if (msgArr[1] == "error") {
+                    toastr.error(msgArr[0]);
+                } else if (msgArr[1] == "warning") {
+                    toastr.warning(msgArr[0]);
+                } else if (msgArr[1] == "info") {
+                    toastr.info(msgArr[0]);
+                }
+
+            }
+        }
+
+
+        });
+
+    </script>
+
+
+}
+
+
+
+
+
+
+

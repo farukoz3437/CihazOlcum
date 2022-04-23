@@ -1,0 +1,241 @@
+﻿@model ArrayMeasurementListModel
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IMandCRM.UI.Identity.User> UserManager
+
+@{
+    ViewData["Title"] = "ArrayMeasurements";
+    var user = await UserManager.GetUserAsync(User);
+}
+
+<!--begin::Toolbar-->
+<div class="toolbar" id="kt_toolbar">
+    <!--begin::Container-->
+    <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+        <!--begin::Page title-->
+        <div data-kt-place="true" data-kt-place-mode="prepend" data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
+            <!--begin::Title-->
+            <!--end::Title-->
+            <!--begin::Separator-->
+            <span class="h-20px border-gray-200 border-start mx-4"></span>
+            <!--end::Separator-->
+            <!--begin::Breadcrumb-->
+            <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+                <!--begin::Item-->
+                <li class="breadcrumb-item text-muted">
+                    <a href="/Home/Index" class="text-muted text-hover-primary">Dizilim Tasarım</a>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-200 w-5px h-2px"></span>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item text-muted">
+                    <a href="/Arraydesign/ArrayDesigns" class="text-muted text-hover-primary">Dizilim Listesi</a>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-200 w-5px h-2px"></span>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item text-dark">Dizilim Noktaları</li>
+                <!--end::Item-->
+            </ul>
+            <!--end::Breadcrumb-->
+        </div>
+        <!--end::Page title-->
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Toolbar-->
+<!--begin::Post-->
+<div class="post d-flex flex-column-fluid" id="kt_post">
+    <!--begin::Container-->
+    <div id="kt_content_container" class="container">
+        <!--begin::Card-->
+        <div class="card">
+            <!--begin::Card header-->
+            <div class="card-header border-0 pt-6">
+                <!--begin::Card title-->
+                <div class="card-title">
+                    <!--begin::Search-->
+                    <div class="d-flex align-items-center position-relative my-1">
+                        <!--begin::Svg Icon | path: icons/duotone/General/Search.svg-->
+                        <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24" />
+                                    <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                    <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero" />
+                                </g>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                        <input type="text" data-kt-arraymeasurement-table-filter="search" class="form-control form-control-solid w-250px ps-15" placeholder="Ölçüm Ara" />
+                    </div>
+                    <!--end::Search-->
+                    <!--begin::Harita-->
+                    <div class="d-flex align-items-center position-relative my-1" style="margin-left:20px;">
+                        <a href="/ArrayMeasurement/Location?arrayIdKod=@Model.ArrayDesignIdKod" class="btn btn-bg-light btn-sm btn-icon-danger btn-text-success">
+                            <span class="svg-icon svg-icon-primary svg-icon-2x">
+                                <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo1\dist/../src/media/svg/icons\Map\Marker1.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect x="0" y="0" width="24" height="24" />
+                                        <path d="M5,10.5 C5,6 8,3 12.5,3 C17,3 20,6.75 20,10.5 C20,12.8325623 17.8236613,16.03566 13.470984,20.1092932 C12.9154018,20.6292577 12.0585054,20.6508331 11.4774555,20.1594925 C7.15915182,16.5078313 5,13.2880005 5,10.5 Z M12.5,12 C13.8807119,12 15,10.8807119 15,9.5 C15,8.11928813 13.8807119,7 12.5,7 C11.1192881,7 10,8.11928813 10,9.5 C10,10.8807119 11.1192881,12 12.5,12 Z" fill="#000000" fill-rule="nonzero" />
+                                    </g>
+                                </svg><!--end::Svg Icon-->
+                            </span>
+                            Harita
+                        </a>
+                    </div>
+                    <!--end::Harita-->
+                </div>
+                <!--begin::Card title-->
+   
+            </div>
+            <!--end::Card header-->
+            <!--begin::Card body-->
+            <div class="card-body pt-0">
+                <form id="ArrayMeasurementListForm">
+                    <!--begin::Table-->
+                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_arraymeasurements_table">
+                        <!--begin::Table head-->
+                        <thead>
+                            <!--begin::Table row-->
+                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">             
+                                <th class="min-w-150px">Nokta Adı</th>
+                                <th class="min-w-200px">Ölçüm Tarihi</th>
+                                <th class="min-w-125px">Dosyalar</th>
+                                <th class="min-w-125px text-center">Detay</th>
+                                <th class="min-w-100px text-center">indir</th>
+                            </tr>
+                            <!--end::Table row-->
+                        </thead>
+                        <!--end::Table head-->
+                        <!--begin::Table body-->
+                        <tbody class="fw-bold text-gray-600">
+                            @foreach (var arrayMeasurement in Model.arrayMeasurements)
+                            {
+                            <tr>
+                                <td>
+                                    <a href="/ArrayMeasurement/ArrayMeasurementEdit?idKod=@arrayMeasurement.IdKod&userId=@user.Id">@arrayMeasurement.PointName</a>
+                                </td>
+                                <td>
+                                    @arrayMeasurement.MeasurementDate?.ToString("dd.MM.yyyy HH:mm")
+                                </td>
+                                <td>
+                                    @arrayMeasurement.FileE @arrayMeasurement.FileN @arrayMeasurement.FileZ
+                                </td>
+                                <td class="text-center">
+                                    <!--begin::FileDownload-->
+                                    <a href="/ArrayMeasurement/ArrayMeasurementDetail?idKod=@arrayMeasurement.IdKod" class="btn btn-icon btn-active-light-primary w-30px h-30px me-3 bg-light-primary">
+                                        <span class="svg-icon svg-icon-primary svg-icon-3">
+                                            <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Info-circle.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect x="0" y="0" width="24" height="24" />
+                                                    <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10" />
+                                                    <rect fill="#000000" x="11" y="10" width="2" height="7" rx="1" />
+                                                    <rect fill="#000000" x="11" y="7" width="2" height="2" rx="1" />
+                                                </g>
+                                            </svg><!--end::Svg Icon-->
+                                        </span>
+                                    </a>
+                                    <!--end::Edit-->
+                                </td>
+                                <td class="text-center">
+                                    <!--begin::FileDownload-->
+                                    <a href="#" class="btn btn-icon btn-active-light-primary w-30px h-30px me-3 bg-light-primary" id="FileIcon-@arrayMeasurement.IdKod" onclick="FileDownload('@arrayMeasurement.IdKod');">
+                                        <span data-bs-toggle="tooltip" data-bs-trigger="hover" title="Dosya İndir">
+                                            <span class="svg-icon svg-icon-primary svg-icon-3">
+                                                <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo1\dist/../src/media/svg/icons\Files\DownloadedFile.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                                        <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                                        <path d="M14.8875071,11.8306874 L12.9310336,11.8306874 L12.9310336,9.82301606 C12.9310336,9.54687369 12.707176,9.32301606 12.4310336,9.32301606 L11.4077349,9.32301606 C11.1315925,9.32301606 10.9077349,9.54687369 10.9077349,9.82301606 L10.9077349,11.8306874 L8.9512614,11.8306874 C8.67511903,11.8306874 8.4512614,12.054545 8.4512614,12.3306874 C8.4512614,12.448999 8.49321518,12.5634776 8.56966458,12.6537723 L11.5377874,16.1594334 C11.7162223,16.3701835 12.0317191,16.3963802 12.2424692,16.2179453 C12.2635563,16.2000915 12.2831273,16.1805206 12.3009811,16.1594334 L15.2691039,12.6537723 C15.4475388,12.4430222 15.4213421,12.1275254 15.210592,11.9490905 C15.1202973,11.8726411 15.0058187,11.8306874 14.8875071,11.8306874 Z" fill="#000000" />
+                                                    </g>
+                                                </svg><!--end::Svg Icon-->
+                                            </span>
+                                        </span>
+                                    </a>
+                                    <!--end::Edit-->
+                                </td>
+                            </tr>
+                            }
+
+                        </tbody>
+                        <!--end::Table body-->
+                    </table>
+                    <!--end::Table-->
+                </form>
+            </div>
+            <!--end::Card body-->
+        </div>
+        <!--end::Card-->
+        <!--begin::Modals-->
+        <!--end::Modals-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Post-->
+@section Scripts
+{
+
+    <!--begin::Page Vendors Javascript(used by this page)-->
+    <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+    <!--end::Page Vendors Javascript-->
+    <!--begin::Page Custom Javascript(used by this page)-->
+    @*<script src="~/assets/js/custom/apps/customers/list/export.js"></script>*@
+    <script src="~/assets/js/custom/apps/arraymeasurement/list.js"></script>
+
+    <!--end::Page Custom Javascript-->
+
+    <script>
+
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut",
+        };
+
+    var msg;
+    if ('@TempData["message"]' != undefined && '@TempData["message"]' != "") {
+        msg = '@Html.Raw((string)TempData["message"])';
+        if (msg != null) {
+            msgArr = msg.split('|');
+            if (msgArr[1] == "success") {
+                toastr.success(msgArr[0]);
+            } else if (msgArr[1] == "error") {
+                toastr.error(msgArr[0]);
+            } else if (msgArr[1] == "warning") {
+                toastr.warning(msgArr[0]);
+            } else if (msgArr[1] == "info") {
+                toastr.info(msgArr[0]);
+            }
+
+        }
+        }
+        async function FileDownload(idKod) {
+
+            window.open('/ArrayMeasurement/DownloadZip?idKod=' + idKod, '_blank');
+
+        }
+
+
+    </script>
+}

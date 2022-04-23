@@ -1,0 +1,1070 @@
+﻿@model CreateArraydesignModel
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IMandCRM.UI.Identity.User> UserManager
+@{
+    ViewData["Title"] = "CreateArrayDesign";
+    var user = await UserManager.GetUserAsync(User);
+}
+
+<style>
+    .form-group {
+        margin-bottom: 1.75em;
+    }
+
+    .faicon {
+        font-weight: 100 !important;
+        font-family: unset !important;
+    }
+
+    .spanIcon {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    #overlay {
+        position: fixed;
+        display: none;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 1000;
+        cursor: wait;
+    }
+
+    #text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 50px;
+        color: white;
+        transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    #spinnerIcon {
+        font-size: 50px;
+    }
+
+    .input-group-text {
+        border: none !important;
+        border-right: 1px solid #eef3f7 !important;
+        border-radius: 0.475rem !important;
+    }
+</style>
+
+<!--begin::Toolbar-->
+<div class="toolbar" id="kt_toolbar">
+    <!--begin::Container-->
+    <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+        <!--begin::Page title-->
+        <div data-kt-place="true" data-kt-place-mode="prepend" data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
+            <!--begin::Title-->
+            <!--end::Title-->
+            <!--begin::Separator-->
+            <span class="h-20px border-gray-200 border-start mx-4"></span>
+            <!--end::Separator-->
+            <!--begin::Breadcrumb-->
+            <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+                <!--begin::Item-->
+                <li class="breadcrumb-item text-muted">
+                    <a href="/Home/Index" class="text-muted text-hover-primary">Measurement Card</a>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-200 w-5px h-2px"></span>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item text-dark">Array Oluştur</li>
+                <!--end::Item-->
+            </ul>
+            <!--end::Breadcrumb-->
+        </div>
+        <!--end::Page title-->
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Toolbar-->
+<!--begin::Post-->
+<div class="post d-flex flex-column-fluid" id="kt_post">
+    <!--begin::Container-->
+    <div class="container">
+        <!--begin::Card-->
+        <div class="card card-custom">
+            <div class="card-body p-0">
+                <div class="wizard wizard-1" id="kt_arraydesigns_create" data-wizard-state="step-first" data-wizard-clickable="true">
+                    <!--begin::Wizard Body-->
+                    <div class="row justify-content-center my-10 px-8 my-lg-15 px-lg-10">
+                        <div class="col-xl-12 col-xxl-10">
+                            <!--begin::Form Wizard-->
+                            <form class="form" id="kt_arraydesign_create_form" asp-controller="Arraydesign" asp-action="CreateArrayDesign" method="post" enctype="multipart/form-data">
+                                <!--begin::Step 1-->
+                                <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                    <h3 class="mb-10 font-weight-bold text-dark">Dizilim Oluştur:</h3>
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <input type="hidden" name="CreatedPersonalId" value="@user.Id" />
+                                            <!--Project name-->
+                                            <div class="form-group row fv-row">
+                                                <div class="col-xl-4 col-lg-4" style="font-weight:500;font-size:1.275rem;color:#181c32;padding:.5rem 3rem">
+                                                    <i class="fas fa-chevron-right text-warning" style=" margin-right:.5rem;line-height: 0;font-size: 1.25rem;"></i>
+                                                    <span>Proje Adı</span>
+                                                </div>
+                                                <div class="col-lg-8 col-xl-8" style="padding:0rem 3rem">
+                                                    <input type="text" class="form-control form-control-lg form-control-solid" asp-for="ProjectName" name="ProjectName" />
+                                                </div>
+                                            </div>
+                                            <!--Array name-->
+                                            <div class="form-group row fv-row">
+                                                <div class="col-xl-4 col-lg-4" style="font-weight:500;font-size:1.275rem;color:#181c32;padding:.5rem 3rem">
+                                                    <i class="fas fa-chevron-right text-warning" style=" margin-right:.5rem;line-height: 0;font-size: 1.25rem;"></i>
+                                                    <span>Dizilim Adı</span>
+                                                </div>
+                                                <div class="col-lg-8 col-xl-8" style="padding:0rem 3rem">
+                                                    <input type="text" class="form-control form-control-lg form-control-solid" asp-for="ArrayName" name="ArrayName" />
+                                                </div>
+                                            </div>
+                                            <!--Array format-->
+                                            <div class="form-group row fv-row">
+                                                <div class="col-xl-4 col-lg-4" style="font-weight:500;font-size:1.275rem;color:#181c32;padding:.5rem 3rem">
+                                                    <i class="fas fa-chevron-right text-warning" style=" margin-right:.5rem;line-height: 0;font-size: 1.25rem;"></i>
+                                                    <span>Dizilim Format</span>
+                                                </div>
+                                                <div class="col-xl-8 col-lg-8" style="margin-top: 6px;padding:0rem 3rem">
+                                                    <div class="form-check form-check-custom form-check-solid">
+                                                        <input class="form-check-input" type="radio" value="0" id="1D" name="ArrayFormat" asp-for="ArrayFormat" checked />
+                                                        <span class="form-check-label" for="flexRadioChecked" style="margin-right:40px;">1 D</span>
+                                                        <input class="form-check-input" type="radio" value="1" id="2D" name="ArrayFormat" asp-for="ArrayFormat" />
+                                                        <span class="form-check-label" for="flexRadioChecked">2 D</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--One design-->
+                                            <!--begin::Card-->
+                                            <div class="card card-custom one-design">
+                                                <div class="card-header">
+                                                    <div class="card-title">
+                                                        <span class="card-icon">
+                                                            <i class="fas fa-chevron-right text-warning"></i>
+                                                        </span>
+                                                        <h3 class="card-label">Dizilim Parametreleri</h3>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div data-scroll="true" data-height="200">
+                                                        <div class="form-group row fv-row ">
+                                                            <label class="col-xl-2 col-lg-2 col-form-label">İstasyon Sayısı</label>
+                                                            <div class="col-lg-2 col-xl-2">
+                                                                <input type="number" class="form-control form-control-lg form-control-solid cartesian-parameter" asp-for="NumberOfStationOneD" min="0" value="0" name="NumberOfStationOneD" />
+                                                            </div>
+                                                            <label class="col-xl-2 col-lg-2 col-form-label">Nokta Aralığı</label>
+                                                            <div class="col-lg-2 col-xl-2">
+                                                                <input type="number" class="form-control form-control-lg form-control-solid cartesian-parameter" asp-for="GeophoneInterval" min="0" value="0" name="GeophoneInterval" />
+                                                            </div>
+                                                            <label class="col-xl-2 col-lg-2 col-form-label">Rostasyon Açısı</label>
+                                                            <div class="col-lg-2 col-xl-2">
+                                                                <div class="input-group input-group-solid">
+                                                                    <input type="number" class="form-control form-control-lg form-control-solid cartesian-parameter" asp-for="RotationangleOneD" value="0" name="RotationangleOneD" max="360" min="0" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text form-control-lg">°</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            <!--end::Card-->
+                                            <!--Two design-->
+                                            <div class="card card-custom two-design" style="display:none;">
+                                                <div class="card-header">
+                                                    <div class="card-title">
+                                                        <span class="card-icon">
+                                                            <i class="fas fa-chevron-right text-warning"></i>
+                                                        </span>
+                                                        <h3 class="card-label">Dizilim Parametreleri</h3>
+                                                    </div>
+                                                    <div class="card-toolbar">
+                                                        <a href="#" id="addArrayParameter" class="btn btn-sm btn-light-primary font-weight-bold">
+                                                            <i class="fas fa-plus"></i>Dizilim Ekle
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body" style="max-height:300px;overflow-y:auto;">
+                                                    <div data-scroll="true" data-height="400" class="two-design-parameters">
+                                                        <div class="form-group row fv-row">
+                                                            <label class="col-xl-2 col-lg-2 col-form-label">İstasyon Sayısı</label>
+                                                            <div class="col-lg-2 col-xl-2">
+                                                                <input type="number" class="form-control form-control-lg form-control-solid cartesian-parameter" asp-for="NumberOfStationTwoD" value="4" min="4" name="NumberOfStationTwoD" />
+                                                            </div>
+                                                            <label class="col-xl-2 col-lg-2 col-form-label">Yarıçap</label>
+                                                            <div class="col-lg-2 col-xl-2">
+                                                                <input type="number" class="form-control form-control-lg form-control-solid radius-twod cartesian-parameter" asp-for="Radius" value="0" name="Radius" />
+                                                            </div>
+                                                            <label class="col-xl-2 col-lg-2 col-form-label">Rostasyon Açısı</label>
+                                                            <div class="col-lg-2 col-xl-2">
+                                                                <div class="input-group input-group-solid">
+                                                                    <input type="number" class="form-control form-control-lg form-control-solid cartesian-parameter" asp-for="RotationangleTwoD" value="0" name="RotationangleTwoD" max="360" min="0" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text form-control-lg">°</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>                                   
+                                            </div>
+                                            <!--Kartezyen Koordinat-->
+                                            <!--begin::Card-->
+                                            <div class="card card-custom cartesian-coordinate">
+                                                <div class="card-header">
+                                                    <div class="card-title">
+                                                        <span class="card-icon">
+                                                            <i class="fas fa-chevron-right text-warning"></i>
+                                                        </span>
+                                                        <h2 class="card-label">Kartezyen Koordinat</h2>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div data-scroll="true" data-height="200">
+                                                        <div class="form-group row fv-row ">
+                                                            <div class="col-lg-4 col-xl-4" style="height:400px;overflow:auto;">
+                                                                <table class="table table-striped gy-7 gs-7">
+                                                                    <thead>
+                                                                        <tr><th colspan="3" class="text-center fw-bold fs-6"><b>Kartezyen Koordinatlar</b></th></tr>
+                                                                        <tr class="fw-bold fs-6 text-gray-800 border-bottom border-gray-200">
+                                                                            <th class="text-center"><b>Nokta Adı</b></th>
+                                                                            <th class="text-center"><b>X</b></th>
+                                                                            <th class="text-center"><b>Y</b></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="cartesianCoordinates">
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div class="col-lg-8 col-xl-8">
+                                                                <!-- Line chart -->
+                                                                <div class="card card-primary card-outline">
+                                                                    <div class="card-header">
+                                                                        <div class="card-title" style="font-weight:600;font-size:1.075rem">
+                                                                            <i class="far fa-chart-bar" style="margin-right:5px;"></i>
+                                                                            Kartezyen Grafik
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <div id="line-chart" style="height: 300px;"></div>
+                                                                    </div>
+                                                                    <!-- /.card-body-->
+                                                                </div>
+                                                                <!--End Line chart -->
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--end::Card-->
+                                            <!--CoordinateType-->
+                                            <!--begin::Card-->
+                                            <div class="card card-custom coordinate-type">
+                                                <div class="card-header">
+                                                    <div class="card-title">
+                                                        <span class="card-icon">
+                                                            <i class="fas fa-chevron-right text-warning"></i>
+                                                        </span>
+                                                        <h3 class="card-label">Koordinat Tipi</h3>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div data-scroll="true" data-height="200">
+                                                        <div class="form-group row fv-row ">
+                                                            <div class="col-xl-8 col-lg-8" style="margin-top: 6px;padding:0rem 3.25rem">
+                                                                <div class="form-check form-check-custom form-check-solid">
+                                                                    <input class="form-check-input" type="radio" value="0" id="utm" name="CoordinateType" asp-for="CoordinateType" checked />
+                                                                    <span class="form-check-label" for="flexRadioChecked" style="margin-right:40px;">UTM</span>
+                                                                    <input class="form-check-input" type="radio" value="1" id="dd" name="CoordinateType" asp-for="CoordinateType" />
+                                                                    <span class="form-check-label" for="flexRadioChecked">Decimal Degree</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row fv-row ">
+                                                            <div class="col-xl-6 col-lg-6">
+                                                                <!--begin::Card-->
+                                                                <div class="card card-custom">
+                                                                    <div class="card-header">
+                                                                        <div class="card-title">
+                                                                            <span class="card-icon">
+                                                                                <i class="fas fa-chevron-right text-warning"></i>
+                                                                            </span>
+                                                                            <h3 class="card-label">Merkez Koordinat</h3>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <div data-scroll="true" data-height="200" style="height:400px;">
+
+                                                                            <div class="utmParameter">
+                                                                                <div class="form-group row fv-row">
+                                                                                    <label class="col-xl-4 col-lg-4 col-form-label">Doğu</label>
+                                                                                    <div class="col-lg-8 col-xl-8">
+                                                                                        <input type="number" class="form-control form-control-lg form-control-solid" asp-for="East" value="0" name="East" />
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group row fv-row">
+                                                                                    <label class="col-xl-4 col-lg-4 col-form-label">Kuzey</label>
+                                                                                    <div class="col-lg-8 col-xl-8">
+                                                                                        <input type="number" class="form-control form-control-lg form-control-solid" asp-for="North" value="0" name="North" />
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group row fv-row">
+                                                                                    <label class="col-xl-4 col-lg-4 col-form-label">Bölge</label>
+                                                                                    <div class="col-lg-8 col-xl-8">
+                                                                                        <!--begin::Select-->
+                                                                                        <select name="Zone" data-control="select2" class="form-select form-select-solid" asp-for="Zone">
+                                                                                            @for (int i = 1; i < 66; i++)
+                                                                                            {
+                                                                                                <option value="@i">@i</option>
+                                                                                            }
+                                                                                        </select>
+                                                                                        <!--end::Select-->
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group row fv-row">
+                                                                                    <label class="col-xl-4 col-lg-4 col-form-label">Bölge Kodu</label>
+                                                                                    <div class="col-lg-8 col-xl-8">
+                                                                                        <!--begin::Select-->
+                                                                                        <select name="ZoneCode" data-control="select2" class="form-select form-select-solid" asp-for="ZoneCode">
+                                                                                            <option value="C">C</option>
+                                                                                            <option value="D">D</option>
+                                                                                            <option value="E">E</option>
+                                                                                            <option value="F">F</option>
+                                                                                            <option value="G">G</option>
+                                                                                            <option value="H">H</option>
+                                                                                            <option value="J">J</option>
+                                                                                            <option value="K">K</option>
+                                                                                            <option value="L">L</option>
+                                                                                            <option value="M">M</option>
+                                                                                            <option value="N">N</option>
+                                                                                            <option value="P">P</option>
+                                                                                            <option value="Q">Q</option>
+                                                                                            <option value="R">R</option>
+                                                                                            <option value="S">S</option>
+                                                                                            <option value="T">T</option>
+                                                                                            <option value="U">U</option>
+                                                                                            <option value="V">V</option>
+                                                                                            <option value="W">W</option>
+                                                                                            <option value="X">X</option>
+                                                                                        </select>
+                                                                                        <!--end::Select-->
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="ddParameter" style="display:none;">
+                                                                                <div class="form-group row fv-row">
+                                                                                    <label class="col-xl-4 col-lg-4 col-form-label">Lat</label>
+                                                                                    <div class="col-lg-8 col-xl-8">
+                                                                                        <input type="number" class="form-control form-control-lg form-control-solid" asp-for="Lat" name="Lat" />
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group row fv-row">
+                                                                                    <label class="col-xl-4 col-lg-4 col-form-label">Lon</label>
+                                                                                    <div class="col-lg-8 col-xl-8">
+                                                                                        <input type="number" class="form-control form-control-lg form-control-solid" asp-for="Lon" name="Lon" />
+                                                                                    </div>
+                                                                                    <div class="col-lg-2 col-xl-2">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="card-footer d-flex justify-content-end">
+                                                                        <button type="button" id="coordinateConvert" class="btn btn-sm btn-light-success font-weight-bold">
+                                                                            <i class="fas fa-exchange-alt"></i>Dönüştür
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <!--end::Card-->
+                                                            </div>
+                                                            <div class="col-xl-6 col-lg-6">
+                                                                <!--begin::Card-->
+                                                                <div class="card card-custom">
+                                                                    <div class="card-header">
+                                                                        <div class="card-title">
+                                                                            <span class="card-icon">
+                                                                                <i class="fas fa-chevron-right text-warning"></i>
+                                                                            </span>
+                                                                            <h3 class="card-label">GPS Koordinat</h3>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <div data-scroll="true" data-height="200" style="height:400px; overflow:auto;">
+                                                                            <table class="table table-striped gy-7 gs-7">
+                                                                                <thead>
+                                                                                    <tr><th colspan="3" class="text-center fw-bold fs-6"><b>Kartezyen Koordinatlar</b></th></tr>
+                                                                                    <tr class="fw-bold fs-6 text-gray-800 border-bottom border-gray-200">
+                                                                                        <th class="text-center"><b>Nokta Adı</b></th>
+                                                                                        <th class="text-center"><b>X</b></th>
+                                                                                        <th class="text-center"><b>Y</b></th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody id="gpsCoordinates">
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="card-footer d-flex justify-content-end">
+                                                                        <button type="button" id="showMap" class="btn btn-sm btn-light-success font-weight-bold">
+                                                                            <i class="fas fa-exchange-alt"></i>Haritaya Aktar
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <!--end::Card-->
+
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--end::Card-->
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end::Step 1-->
+                                <!--begin::Actions-->
+                                <div class="d-flex justify-content-between border-top mt-5 pt-10">
+                                    <div class="mr-2">
+                                        <button type="button" id="kt_create_arraydesign_submit" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4">Kaydet</button>
+                                    </div>
+                                </div>
+                                <!--end::Actions-->
+                            </form>
+                            <!--end::Form Wizard-->
+                        </div>
+                    </div>
+                    <!--end::Wizard Body-->
+                </div>
+            </div>
+        </div>
+        <!--end::Card-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Post-->
+
+
+
+@section Scripts
+{
+
+
+
+    <script src="~/assets/js/custom/flotchart/jquery.flot.js"></script>
+    <!-- FLOT RESIZE PLUGIN - allows the chart to redraw when the window is resized -->
+    <script src="~/assets/js/custom/flotchart/jquery.flot.resize.js"></script>
+    <!-- FLOT PIE PLUGIN - also used to draw donut charts -->
+    <script src="~/assets/js/custom/flotchart/jquery.flot.pie.js"></script>
+
+    <script>
+
+        $(function () {
+
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut",
+            };
+
+            CalculateCartesianAndGraph();
+
+            $("[name='ArrayFormat']").on("change", function () {
+                if ($(this).val() == "0") {
+                    $(".one-design").css("display", "block");
+                    $(".two-design").css("display", "none");
+                    CalculateCartesianAndGraph();
+                } else {
+                    $(".one-design").css("display", "none");
+                    $(".two-design").css("display", "block");
+                    CalculateCartesianAndGraph();
+                }
+      
+            });
+
+            $("#addArrayParameter").on("click", function () {
+                var html = CreateParameter();
+                $(".two-design-parameters").append(html);
+
+            });
+
+            $(".cartesian-parameter").on("change", function () {
+
+                if ($(this).val() == "") {
+                    $(this).val(0);
+                } else {
+                    CalculateCartesianAndGraph();
+                }
+          
+            });
+
+
+
+            //Çok boyutta açı ekleme kontrolü
+
+            $("body").delegate(".radius-twod", "blur", function () {
+                debugger;
+                var ind = $(".radius-twod").index(this);
+                var newRadius = $(this).val();
+                $(".radius-twod").each(function (index, val) {
+                    debugger;
+                    if (ind != index) {
+                        if (parseInt(newRadius) <= parseInt($(this).val())) {
+                            toastr.warning("Yarıçap, önceki yarıçaplardan büyük olmalıdır.");
+                            $(".radius-twod").eq(ind).val("");
+                            return;
+                        }
+                    }
+                });
+            });
+
+            //Koordinat tipi seçimi
+
+            $("[name='CoordinateType']").on("change", function () {
+                if ($(this).val() == "0") {
+                    $(".utmParameter").css("display", "block");
+                    $(".ddParameter").css("display", "none");
+                } else {
+                    $(".utmParameter").css("display", "none");
+                    $(".ddParameter").css("display", "block");
+                }
+            });
+
+            //GPS koordinatlarına çevirme
+
+            $("#coordinateConvert").on("click", function () {
+                debugger;
+                var html = ``;
+                var coordinateType = $("[name='CoordinateType']:checked").val();
+                if (coordinateType == "0") {
+                    var east = parseFloat($("[name='East']").val());
+                    var north = parseFloat($("[name='North']").val());
+                    $("[name='CartesianPointName']").each(function () {
+                        var index = $("[name='CartesianPointName']").index(this);
+                        var gpsPointName = $(this).val();
+                        var gpsX = parseFloat($("[name='CartesianX']").eq(index).val());
+                        var gpsY = parseFloat($("[name='CartesianY']").eq(index).val());
+                        html += `<tr>`;
+                        html += `<td class="text-center">${gpsPointName}<input type="hidden" name="GpsPointName" value="${gpsPointName}" /></td>`;
+                        html += `<td class="text-center">${gpsX + east}<input type="hidden" name="GpsX" value="${gpsX + east}" /></td>`;
+                        html += `<td class="text-center">${gpsY + north}<input type="hidden" name="GpsY" value="${gpsY + north}" /></td>`;
+                        html += `</tr>`;
+                    });
+
+                } else {
+                    debugger;
+                    var lat = parseFloat($("[name='Lat']").val());
+                    var lon = parseFloat($("[name='Lon']").val());
+
+                    var dataUtm = Deg2UTM(lat, lon);
+
+                    var east = parseInt(dataUtm.East);
+                    var north = parseInt(dataUtm.North);
+                    var zone = dataUtm.Zone;
+                    var letter = dataUtm.Letter;
+
+                    $("[name='CartesianPointName']").each(function () {
+                        debugger;
+                        var index = $("[name='CartesianPointName']").index(this);
+                        var gpsPointName = $(this).val();
+                        var cartX = parseFloat($("[name='CartesianX']").eq(index).val());
+                        var cartY = parseFloat($("[name='CartesianY']").eq(index).val());
+                        var dataDecimalDegree = UTM2Deg(zone, letter, cartX + east, cartY + north);
+                        html += `<tr>`;
+                        html += `<td class="text-center">${gpsPointName}<input type="hidden" name="GpsPointName" value="${gpsPointName}" /></td>`;
+                        html += `<td class="text-center">${dataDecimalDegree.Lat}<input type="hidden" name="GpsX" value="${dataDecimalDegree.Lat}" /></td>`;
+                        html += `<td class="text-center">${dataDecimalDegree.Lon}<input type="hidden" name="GpsY" value="${dataDecimalDegree.Lon}" /></td>`;
+                        html += `</tr>`;
+                    });
+
+                }
+
+                $("#gpsCoordinates").html(html);
+
+            });
+
+            $("#kt_create_arraydesign_submit").on("click", function () {
+
+                var isValid = FormValidation();
+
+                if (isValid) {
+                    Swal.fire({
+                        title: "Dizilimi kaydetmek istediğinizden emin misiniz?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        cancelButtonText: "Hayır!",
+                        confirmButtonText: "Evet!"
+                    }).then(function (result) {
+                        if (result.value) {
+                            $('#kt_arraydesign_create_form').submit();
+                        }
+                    });
+                }
+
+            });
+
+        });
+
+
+        //Kartezyen hesaplama ve grafik oluşturma
+
+        function CalculateCartesianAndGraph() {
+
+            if ($("[name='ArrayFormat']").val() == "0") {
+
+                var numberOfStation = $("[name='NumberOfStationOneD']").val();
+                var geophoneInterval = $("[name='GeophoneInterval']").val();
+                var rotationangle = $("[name='RotationangleOneD']").val();
+                var arrCartesian = CartesianCalculateOneDimensional(numberOfStation, rotationangle, geophoneInterval);
+                var html = ``;
+                $.each(arrCartesian, function (ind, val) {
+                    html += `<tr>`;
+                    html += `<td class="text-center">${val.PointName}<input type="hidden" name="CartesianPointName" value="${val.PointName}"/><input type="hidden" name="DesignNumber" value="${val.DesignNumber}" /></td>`;
+                    html += `<td class="text-center">${val.X}<input type="hidden" name="CartesianX" value="${val.X}" /></td>`;
+                    html += `<td class="text-center">${val.Y}<input type="hidden" name="CartesianY" value="${val.Y}" /></td>`;
+                    html += `</tr>`;
+                });
+                $("#cartesianCoordinates").html(html);
+
+
+                CreateChartOneD(arrCartesian);
+
+
+            } else {
+
+                var numberOfStation;
+                var radius;
+                var rotationangle;
+                var arrCartesianMultiple = [];
+                var pointNumber = 1;
+
+                $("[name='NumberOfStationTwoD']").each(function () {
+                    debugger;
+                    var index = $("[name='NumberOfStationTwoD']").index(this);
+                    numberOfStation = $(this).val();
+                    radius = $("[name='Radius']").eq(index).val();
+                    rotationangle = $("[name='RotationangleTwoD']").eq(index).val();
+                    var data = CartesianCalculateMultiDimensional(numberOfStation, rotationangle, radius, pointNumber, index);
+                    pointNumber = data.pointNumber;
+                    arrCartesianMultiple.push(data.arrCartesian);
+                });
+
+                var html = ``;
+                html += `<tr>`;
+                html += `<td class="text-center">m0<input type="hidden" name="CartesianPointName" value="m0" /><input type="hidden" name="DesignNumber" value="${1}"/></td>`;
+                html += `<td class="text-center">0.00<input type="hidden" name="CartesianX" value="0.00" /></td>`;
+                html += `<td class="text-center">0.00<input type="hidden" name="CartesianY" value="0.00" /></td>`;
+                html += `</tr>`;
+
+                $.each(arrCartesianMultiple, function (ind, arrCartesianOne) {
+
+                    $.each(arrCartesianOne, function (index, val) {
+                        html += `<tr>`;
+                        html += `<td class="text-center">${val.PointName}<input type="hidden" name="CartesianPointName" value="${val.PointName}" /><input type="hidden" name="DesignNumber" value="${val.DesignNumber}" /></td>`;
+                        html += `<td class="text-center">${val.X}<input type="hidden" name="CartesianX" value="${val.X}" /></td>`;
+                        html += `<td class="text-center">${val.Y}<input type="hidden" name="CartesianY" value="${val.Y}" /></td>`;
+                        html += `</tr>`;
+                    });
+                });
+
+                $("#cartesianCoordinates").html(html);
+                $(".cartesian-coordinate").css("display", "block");
+                $(".coordinate-type").css("display", "block");
+
+                CreateChartTwoD(arrCartesianMultiple);
+
+            }
+
+        }
+
+        //Tek boyutta kartezyen hesaplama fonksiyonu
+        function CartesianCalculateOneDimensional(numberOfStation, rotationAngle, geophoneInterval) {
+            var arrCartesian = [];
+            rotationAngle = 90 + parseInt(rotationAngle);
+            var geophoneIntervalTotal = parseInt(geophoneInterval);
+            arrCartesian.push({ "X": 0, "Y": 0, "PointName": "m" + 0, "DesignNumber": 1 });
+            for (var i = 1; i < numberOfStation; i++) {
+                var xi = parseFloat((Math.sin(rotationAngle * Math.PI / 180)) * geophoneIntervalTotal);
+                var yi = parseFloat((Math.cos(rotationAngle * Math.PI / 180)) * geophoneIntervalTotal);
+                arrCartesian.push({ "X": xi.toFixed(2), "Y": yi.toFixed(2), "PointName": "m" + i, "DesignNumber":1 });
+                geophoneIntervalTotal += parseInt(geophoneInterval);
+            }
+            return arrCartesian;
+        }
+
+        //Çok boyutta kartezyen hesaplama fonksiyonu
+        function CartesianCalculateMultiDimensional(numberOfStation, rotationangle, radius, pointNumber,index) {
+            radius = parseFloat(radius);
+            rotationangle = parseFloat(rotationangle);
+            var arr = [];
+            var arrCartesian = [];
+            var value = 360 / (numberOfStation - 1);
+
+            for (var i = -value; i <= 360 - value; i += value) {
+                arr.push(i);
+            }
+
+            for (var i = 1; i < numberOfStation; i++) {
+                debugger;
+                var xi = parseFloat((Math.sin((arr[i] + rotationangle) * Math.PI / 180)) * radius);
+                var yi = parseFloat((Math.cos((arr[i] + rotationangle) * Math.PI / 180)) * radius);
+                arrCartesian.push({ "X": xi.toFixed(2), "Y": yi.toFixed(2), "PointName": "m" + pointNumber,"DesignNumber":index+1 });
+                pointNumber++;
+            }
+            return { "arrCartesian": arrCartesian, "pointNumber": pointNumber };
+        }
+
+
+        //Çok boyutta kartezyen parametre ekleme
+        function CreateParameter() {
+
+            var html = "";
+            html += `<div class="form-group row fv-row" style="margin-top:5px;">`;
+            html += `<label class="col-xl-2 col-lg-2 col-form-label">İstasyon Sayısı</label>`;
+            html += `<div class="col-lg-2 col-xl-2">`;
+            html += `<input type="number" class="form-control form-control-lg form-control-solid cartesian-parameter" asp-for="NumberOfStationTwoD" value="4" min="4" name="NumberOfStationTwoD" />`;
+            html += `</div>`;
+            html += `<label class="col-xl-2 col-lg-2 col-form-label">Yarıçap</label>`;
+            html += `<div class="col-lg-2 col-xl-2">`;
+            html += `<input type="number" class="form-control form-control-lg form-control-solid radius-twod cartesian-parameter" asp-for="Radius" value="0" min="0" name="Radius" />`;
+            html += `</div>`;
+            html += `<label class="col-xl-2 col-lg-2 col-form-label">Rostasyon Açısı</label>`;
+            html += `<div class="col-lg-2 col-xl-2">`;
+            html += `<div class="input-group input-group-solid">`;
+            html += `<input type="number" class="form-control form-control-lg form-control-solid cartesian-parameter" asp-for="RotationangleTwoD" value="0" name="RotationangleTwoD" max="360" min="0" />`;
+            html += `<div class="input-group-append">`;
+            html += `<span class="input-group-text form-control-lg">°</span>`;
+            html += `</div>`;
+            html += `</div>`;
+            html += `</div>`;
+            html += `</div>`;
+            return html;
+        }
+
+        //Tek boyutta kartezyen grafiği
+        function CreateChartOneD(arrCartesian) {
+            debugger;
+
+            var linePoints = [];
+            var labels = [];
+
+            $.each(arrCartesian, function (ind, item) {
+                linePoints.push([item.X, item.Y]);
+                labels.push(item.PointName);
+            });
+            var line_data = {
+                data: linePoints,
+                label: labels,
+                color: '#3c8dbc'
+            }
+            $.plot('#line-chart', [line_data], {
+                grid: {
+                    hoverable: true,
+                    borderColor: '#f3f3f3',
+                    borderWidth: 1,
+                    tickColor: '#f3f3f3'
+                },
+                series: {
+                    shadowSize: 0,
+                    lines: {
+                        show: true
+                    },
+                    points: {
+                        show: true
+                    }
+                },
+                lines: {
+                    fill: false,
+                    color: ['#3c8dbc', '#f56954']
+                },
+                yaxis: {
+                    show: true
+                },
+                xaxis: {
+                    show: true
+                }
+            })
+            //Initialize tooltip on hover
+            $('<div class="tooltip-inner" id="line-chart-tooltip"></div>').css({
+                position: 'absolute',
+                display: 'none',
+                opacity: 0.8
+            }).appendTo('body')
+            $('#line-chart').bind('plothover', function (event, pos, item) {
+                if (item) {
+                    var x = item.datapoint[0].toFixed(2),
+                        y = item.datapoint[1].toFixed(2),
+                        lbl = item.series.label[item.dataIndex]
+
+
+                    $('#line-chart-tooltip').html(lbl + ' X: ' + x + ' - Y: ' + y)
+                        .css({
+                            top: item.pageY + 5,
+                            left: item.pageX + 5
+                        })
+                        .fadeIn(200)
+                } else {
+                    $('#line-chart-tooltip').hide()
+                }
+
+            })
+
+
+        }
+
+        //Çok boyutta kartezyen grafiği
+        function CreateChartTwoD(arrCartesianMultiple) {
+            debugger;
+
+            var lineArr = [];
+
+            $.each(arrCartesianMultiple, function (ind, arrCartesian) {
+                debugger;
+                var linePoints = [];
+                var labels = [];
+                if (ind == 0) {
+                    linePoints.push([0, 0]);
+                    labels.push("m0");
+                }
+                $.each(arrCartesian, function (index, item) {
+                    linePoints.push([item.X, item.Y]);
+                    labels.push(item.PointName);
+                });
+                linePoints.push([arrCartesian[0].X, arrCartesian[0].Y]);
+                labels.push(arrCartesian[0].PointName);
+                var line_data = {
+                    data: linePoints,
+                    label: labels,
+                    color: getRandomColor()
+                }
+                lineArr.push(line_data);
+            });
+
+
+            $.plot('#line-chart', lineArr, {
+                grid: {
+                    hoverable: true,
+                    borderColor: '#f3f3f3',
+                    borderWidth: 1,
+                    tickColor: '#f3f3f3'
+                },
+                series: {
+                    shadowSize: 0,
+                    lines: {
+                        show: true
+                    },
+                    points: {
+                        show: true
+                    }
+                },
+                lines: {
+                    fill: false,
+                    color: ['#3c8dbc', '#f56954']
+                },
+                yaxis: {
+                    show: true,
+                    gridLines: true,
+                },
+                xaxis: {
+                    show: true,
+                    gridLines: true,
+                }
+            })
+            //Initialize tooltip on hover
+            $('<div class="tooltip-inner" id="line-chart-tooltip"></div>').css({
+                position: 'absolute',
+                display: 'none',
+                opacity: 0.8
+            }).appendTo('body')
+            $('#line-chart').bind('plothover', function (event, pos, item) {
+                if (item) {
+                    var x = item.datapoint[0].toFixed(2),
+                        y = item.datapoint[1].toFixed(2),
+                        lbl = item.series.label[item.dataIndex]
+
+
+                    $('#line-chart-tooltip').html(lbl + ' X: ' + x + ' - Y: ' + y)
+                        .css({
+                            top: item.pageY + 5,
+                            left: item.pageX + 5
+                        })
+                        .fadeIn(200)
+                } else {
+                    $('#line-chart-tooltip').hide()
+                }
+
+            })
+
+
+        }
+
+        //Grafik nokta etiketi
+        function labelFormatter(label, series) {
+            return '<div style="font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;">'
+                + label
+                + '<br>'
+                + Math.round(series.percent) + '%</div>'
+        }
+
+        //Grafik çizgi rengi oluşturma
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        //UTM koordinatı DD koordinatına çevirme
+        function UTM2Deg(zone, letter, easting, northing) {
+            debugger;
+            zone = parseInt(zone);
+            letter = letter.toUpperCase();
+
+            easting = parseFloat(easting);
+            northing = parseFloat(northing);
+            var hem;
+            if (letter > 'M')
+                hem = 'N';
+            else
+                hem = 'S';
+            var north;
+            if (hem == 'S')
+                north = northing - 10000000;
+            else
+                north = northing;
+
+            var latitude = (north / 6366197.724 / 0.9996 + (1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2) - 0.006739496742 * Math.sin(north / 6366197.724 / 0.9996) * Math.cos(north / 6366197.724 / 0.9996) * (Math.atan(Math.cos(Math.atan((Math.exp((easting - 500000) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))) * (1 - 0.006739496742 * Math.pow((easting - 500000) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))), 2) / 2 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2) / 3)) - Math.exp(-(easting - 500000) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))) * (1 - 0.006739496742 * Math.pow((easting - 500000) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))), 2) / 2 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2) / 3))) / 2 / Math.cos((north - 0.9996 * 6399593.625 * (north / 6366197.724 / 0.9996 - 0.006739496742 * 3 / 4 * (north / 6366197.724 / 0.9996 + Math.sin(2 * north / 6366197.724 / 0.9996) / 2) + Math.pow(0.006739496742 * 3 / 4, 2) * 5 / 3 * (3 * (north / 6366197.724 / 0.9996 + Math.sin(2 * north / 6366197.724 / 0.9996) / 2) + Math.sin(2 * north / 6366197.724 / 0.9996) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) / 4 - Math.pow(0.006739496742 * 3 / 4, 3) * 35 / 27 * (5 * (3 * (north / 6366197.724 / 0.9996 + Math.sin(2 * north / 6366197.724 / 0.9996) / 2) + Math.sin(2 * north / 6366197.724 / 0.9996) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) / 4 + Math.sin(2 * north / 6366197.724 / 0.9996) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) / 3)) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))) * (1 - 0.006739496742 * Math.pow((easting - 500000) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))), 2) / 2 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) + north / 6366197.724 / 0.9996))) * Math.tan((north - 0.9996 * 6399593.625 * (north / 6366197.724 / 0.9996 - 0.006739496742 * 3 / 4 * (north / 6366197.724 / 0.9996 + Math.sin(2 * north / 6366197.724 / 0.9996) / 2) + Math.pow(0.006739496742 * 3 / 4, 2) * 5 / 3 * (3 * (north / 6366197.724 / 0.9996 + Math.sin(2 * north / 6366197.724 / 0.9996) / 2) + Math.sin(2 * north / 6366197.724 / 0.9996) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) / 4 - Math.pow(0.006739496742 * 3 / 4, 3) * 35 / 27 * (5 * (3 * (north / 6366197.724 / 0.9996 + Math.sin(2 * north / 6366197.724 / 0.9996) / 2) + Math.sin(2 * north / 6366197.724 / 0.9996) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) / 4 + Math.sin(2 * north / 6366197.724 / 0.9996) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) / 3)) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))) * (1 - 0.006739496742 * Math.pow((easting - 500000) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))), 2) / 2 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) + north / 6366197.724 / 0.9996)) - north / 6366197.724 / 0.9996) * 3 / 2) * (Math.atan(Math.cos(Math.atan((Math.exp((easting - 500000) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))) * (1 - 0.006739496742 * Math.pow((easting - 500000) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))), 2) / 2 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2) / 3)) - Math.exp(-(easting - 500000) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))) * (1 - 0.006739496742 * Math.pow((easting - 500000) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))), 2) / 2 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2) / 3))) / 2 / Math.cos((north - 0.9996 * 6399593.625 * (north / 6366197.724 / 0.9996 - 0.006739496742 * 3 / 4 * (north / 6366197.724 / 0.9996 + Math.sin(2 * north / 6366197.724 / 0.9996) / 2) + Math.pow(0.006739496742 * 3 / 4, 2) * 5 / 3 * (3 * (north / 6366197.724 / 0.9996 + Math.sin(2 * north / 6366197.724 / 0.9996) / 2) + Math.sin(2 * north / 6366197.724 / 0.9996) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) / 4 - Math.pow(0.006739496742 * 3 / 4, 3) * 35 / 27 * (5 * (3 * (north / 6366197.724 / 0.9996 + Math.sin(2 * north / 6366197.724 / 0.9996) / 2) + Math.sin(2 * north / 6366197.724 / 0.9996) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) / 4 + Math.sin(2 * north / 6366197.724 / 0.9996) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) / 3)) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))) * (1 - 0.006739496742 * Math.pow((easting - 500000) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))), 2) / 2 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) + north / 6366197.724 / 0.9996))) * Math.tan((north - 0.9996 * 6399593.625 * (north / 6366197.724 / 0.9996 - 0.006739496742 * 3 / 4 * (north / 6366197.724 / 0.9996 + Math.sin(2 * north / 6366197.724 / 0.9996) / 2) + Math.pow(0.006739496742 * 3 / 4, 2) * 5 / 3 * (3 * (north / 6366197.724 / 0.9996 + Math.sin(2 * north / 6366197.724 / 0.9996) / 2) + Math.sin(2 * north / 6366197.724 / 0.9996) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) / 4 - Math.pow(0.006739496742 * 3 / 4, 3) * 35 / 27 * (5 * (3 * (north / 6366197.724 / 0.9996 + Math.sin(2 * north / 6366197.724 / 0.9996) / 2) + Math.sin(2 * north / 6366197.724 / 0.9996) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) / 4 + Math.sin(2 * north / 6366197.724 / 0.9996) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) / 3)) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))) * (1 - 0.006739496742 * Math.pow((easting - 500000) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))), 2) / 2 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) + north / 6366197.724 / 0.9996)) - north / 6366197.724 / 0.9996)) * 180 / Math.PI;
+            latitude = Math.round(latitude * 10000000);
+            latitude = latitude / 10000000;
+            var longitude = Math.atan((Math.exp((easting - 500000) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))) * (1 - 0.006739496742 * Math.pow((easting - 500000) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))), 2) / 2 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2) / 3)) - Math.exp(-(easting - 500000) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))) * (1 - 0.006739496742 * Math.pow((easting - 500000) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))), 2) / 2 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2) / 3))) / 2 / Math.cos((north - 0.9996 * 6399593.625 * (north / 6366197.724 / 0.9996 - 0.006739496742 * 3 / 4 * (north / 6366197.724 / 0.9996 + Math.sin(2 * north / 6366197.724 / 0.9996) / 2) + Math.pow(0.006739496742 * 3 / 4, 2) * 5 / 3 * (3 * (north / 6366197.724 / 0.9996 + Math.sin(2 * north / 6366197.724 / 0.9996) / 2) + Math.sin(2 * north / 6366197.724 / 0.9996) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) / 4 - Math.pow(0.006739496742 * 3 / 4, 3) * 35 / 27 * (5 * (3 * (north / 6366197.724 / 0.9996 + Math.sin(2 * north / 6366197.724 / 0.9996) / 2) + Math.sin(2 * north / 6366197.724 / 0.9996) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) / 4 + Math.sin(2 * north / 6366197.724 / 0.9996) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2) * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) / 3)) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))) * (1 - 0.006739496742 * Math.pow((easting - 500000) / (0.9996 * 6399593.625 / Math.sqrt((1 + 0.006739496742 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)))), 2) / 2 * Math.pow(Math.cos(north / 6366197.724 / 0.9996), 2)) + north / 6366197.724 / 0.9996)) * 180 / Math.PI + zone * 6 - 183;
+            longitude = Math.round(longitude * 10000000);
+            longitude = longitude / 10000000;
+            return { "Lat": latitude, "Lon": longitude };
+        }
+
+        //DD koordinatı UTM koordinatına çevirme
+        function Deg2UTM(lat, lon) {
+            debugger;
+            lon = parseFloat(lon);
+            lat = parseFloat(lat);
+            var easting;
+            var northing;
+            var zone;
+            var letter;
+
+            zone = parseInt(Math.floor(lon / 6 + 31));
+            if (lat < -72)
+                letter = 'C';
+            else if (lat < -64)
+                letter = 'D';
+            else if (lat < -56)
+                letter = 'E';
+            else if (lat < -48)
+                letter = 'F';
+            else if (lat < -40)
+                letter = 'G';
+            else if (lat < -32)
+                letter = 'H';
+            else if (lat < -24)
+                letter = 'J';
+            else if (lat < -16)
+                letter = 'K';
+            else if (lat < -8)
+                letter = 'L';
+            else if (lat < 0)
+                letter = 'M';
+            else if (lat < 8)
+                letter = 'N';
+            else if (lat < 16)
+                letter = 'P';
+            else if (lat < 24)
+                letter = 'Q';
+            else if (lat < 32)
+                letter = 'R';
+            else if (lat < 40)
+                letter = 'S';
+            else if (lat < 48)
+                letter = 'T';
+            else if (lat < 56)
+                letter = 'U';
+            else if (lat < 64)
+                letter = 'V';
+            else if (lat < 72)
+                letter = 'W';
+            else
+                letter = 'X';
+
+            easting = 0.5 * Math.log((1 + Math.cos(lat * Math.PI / 180) * Math.sin(lon * Math.PI / 180 - (6 * zone - 183) * Math.PI / 180)) / (1 - Math.cos(lat * Math.PI / 180) * Math.sin(lon * Math.PI / 180 - (6 * zone - 183) * Math.PI / 180))) * 0.9996 * 6399593.62 / Math.pow((1 + Math.pow(0.0820944379, 2) * Math.pow(Math.cos(lat * Math.PI / 180), 2)), 0.5) * (1 + Math.pow(0.0820944379, 2) / 2 * Math.pow((0.5 * Math.log((1 + Math.cos(lat * Math.PI / 180) * Math.sin(lon * Math.PI / 180 - (6 * zone - 183) * Math.PI / 180)) / (1 - Math.cos(lat * Math.PI / 180) * Math.sin(lon * Math.PI / 180 - (6 * zone - 183) * Math.PI / 180)))), 2) * Math.pow(Math.cos(lat * Math.PI / 180), 2) / 3) + 500000;
+            easting = Math.round(easting * 100) * 0.01;
+            northing = (Math.atan(Math.tan(lat * Math.PI / 180) / Math.cos((lon * Math.PI / 180 - (6 * zone - 183) * Math.PI / 180))) - lat * Math.PI / 180) * 0.9996 * 6399593.625 / Math.sqrt(1 + 0.006739496742 * Math.pow(Math.cos(lat * Math.PI / 180), 2)) * (1 + 0.006739496742 / 2 * Math.pow(0.5 * Math.log((1 + Math.cos(lat * Math.PI / 180) * Math.sin((lon * Math.PI / 180 - (6 * zone - 183) * Math.PI / 180))) / (1 - Math.cos(lat * Math.PI / 180) * Math.sin((lon * Math.PI / 180 - (6 * zone - 183) * Math.PI / 180)))), 2) * Math.pow(Math.cos(lat * Math.PI / 180), 2)) + 0.9996 * 6399593.625 * (lat * Math.PI / 180 - 0.005054622556 * (lat * Math.PI / 180 + Math.sin(2 * lat * Math.PI / 180) / 2) + 4.258201531e-05 * (3 * (lat * Math.PI / 180 + Math.sin(2 * lat * Math.PI / 180) / 2) + Math.sin(2 * lat * Math.PI / 180) * Math.pow(Math.cos(lat * Math.PI / 180), 2)) / 4 - 1.674057895e-07 * (5 * (3 * (lat * Math.PI / 180 + Math.sin(2 * lat * Math.PI / 180) / 2) + Math.sin(2 * lat * Math.PI / 180) * Math.pow(Math.cos(lat * Math.PI / 180), 2)) / 4 + Math.sin(2 * lat * Math.PI / 180) * Math.pow(Math.cos(lat * Math.PI / 180), 2) * Math.pow(Math.cos(lat * Math.PI / 180), 2)) / 3);
+            if (letter < 'M')
+                northing = northing + 10000000;
+            northing = Math.round(northing * 100) * 0.01;
+
+            return { "East": parseInt(Math.round(easting)), "North": parseInt(Math.round(northing)), "Letter": letter, "Zone": zone }
+        }
+
+        function FormValidation() {
+            var isValid = true;
+            if ($('[name="ArrayName"]').val() == "") {
+                toastr.warning("Dizilim adını giriniz...");
+                isValid = false;
+            }
+            if ($('[name="ProjectName"]').val() == "") {
+                toastr.warning("Proje adını giriniz...");
+                isValid = false;
+            }
+            return isValid;
+        }
+
+    </script>
+
+
+}
+
+
+
+
+
+
+
+
+
+
