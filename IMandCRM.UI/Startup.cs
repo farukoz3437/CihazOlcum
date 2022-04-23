@@ -33,11 +33,11 @@ namespace IMandCRM.UI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //identity ayarlarý
+            //identity ayarlarÃ½
       
-            //services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(@"Data Source=DESKTOP-DHUQA7J\SQLEXPRESS;Initial Catalog=Measurement;persist security info=True;user id=frk;Password=123456;"));
+           
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(@"Data Source=LAPTOP-Q5KQP3V5\SQLEXPRESS;Initial Catalog=Measurement;persist security info=True;user id=qbot;Password=123;"));
-            //services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(@"Data Source=94.73.148.5;Initial Catalog=u8294396_seis_db;persist security info=True;user id=u8294396_seis_us;Password=JKij27P9GKut19Q;"));
+            
 
 
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
@@ -45,33 +45,33 @@ namespace IMandCRM.UI
             services.Configure<IdentityOptions>(options =>
             {
                 //password
-                options.Password.RequireDigit = true; //parola içinde sayýsal deðer olmalýdýr
-                options.Password.RequireLowercase = true; // parola içinde küçük harf olmak zorunda
+                options.Password.RequireDigit = true; //parola iÃ§inde sayÃ½sal deÃ°er olmalÃ½dÃ½r
+                options.Password.RequireLowercase = true; // parola iÃ§inde kÃ¼Ã§Ã¼k harf olmak zorunda
                 options.Password.RequireUppercase = true;
-                options.Password.RequiredLength = 8; // parola min. kaç karakter olacaðý
-                options.Password.RequireNonAlphanumeric = true; // parola içinde bir karakter olmalýdýr
+                options.Password.RequiredLength = 8; // parola min. kaÃ§ karakter olacaÃ°Ã½
+                options.Password.RequireNonAlphanumeric = true; // parola iÃ§inde bir karakter olmalÃ½dÃ½r
 
                 //Locaout
-                options.Lockout.MaxFailedAccessAttempts = 5; //parolanýn max 5 defa yanlýþ girebilir
+                options.Lockout.MaxFailedAccessAttempts = 5; //parolanÃ½n max 5 defa yanlÃ½Ã¾ girebilir
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                 options.Lockout.AllowedForNewUsers = true;
 
-                /*options.User.AllowedUserNameCharacters = "";*///user içinde olmasýný istediðiniz karakterler
-                options.User.RequireUniqueEmail = true; // ayný mail adresinden iki kullanýcý olamaz
-                options.SignIn.RequireConfirmedEmail = true; ; //kullanýcýya onay maili gönderilmesi
+                /*options.User.AllowedUserNameCharacters = "";*///user iÃ§inde olmasÃ½nÃ½ istediÃ°iniz karakterler
+                options.User.RequireUniqueEmail = true; // aynÃ½ mail adresinden iki kullanÃ½cÃ½ olamaz
+                options.SignIn.RequireConfirmedEmail = true; ; //kullanÃ½cÃ½ya onay maili gÃ¶nderilmesi
                 options.SignIn.RequireConfirmedPhoneNumber = false;
 
 
             });
 
-            //cookie ayarlarý
+            //cookie ayarlarÃ½
 
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/account/login";
                 options.LogoutPath = "/account/logout";
                 options.AccessDeniedPath = "/account/accessdenied";
-                options.SlidingExpiration = true; //cookie nin yaþam süresini belirler
+                options.SlidingExpiration = true; //cookie nin yaÃ¾am sÃ¼resini belirler
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
                 options.Cookie = new CookieBuilder
                 {
